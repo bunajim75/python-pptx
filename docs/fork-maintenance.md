@@ -12,9 +12,9 @@ For normal work, branch from the current fork base, make one coherent change,
 run the applicable commands from `tox.ini`, `Makefile`, and the development
 documentation, then open a focused pull request to `master`. Typical local
 commands are `pytest -qx`, `behave --format progress --stop --tags=-wip`,
-`ruff check .`, and `make build`; use `tox` for the supported Python matrix
-when practical. Review the complete diff before committing and pushing to
-`origin`.
+`ruff check .`, and `make build`; use `tox -e py311` and `tox -e py312` for
+the supported Python matrix when practical. Review the complete diff before
+committing and pushing to `origin`.
 
 Synchronize upstream only on a dedicated branch and through its own pull
 request:

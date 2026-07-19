@@ -10,10 +10,12 @@ current upstream base is release `v1.0.2`, commit
 
 ## Current state
 
-- Fork capabilities beyond upstream: none.
-- Public API additions: none.
-- Lecturegen integration: not integrated. Lecturegen-specific concepts remain
-  outside this repository.
+- Minimum supported Python version: Python 3.11.
+- CI and tox cover Python 3.11 and 3.12.
+- The inherited test suite is compatible with current pyparsing and pytest;
+  pytest and Behave pass on the supported GitHub Actions matrix.
+- Fork-specific PowerPoint capabilities and public API additions: none.
+- Lecturegen-specific concepts remain outside this repository.
 - Verification: changes require proportionate unit, acceptance, integration,
   and round-trip coverage, plus desktop PowerPoint inspection where behavior
   can affect rendered or application-specific results.
