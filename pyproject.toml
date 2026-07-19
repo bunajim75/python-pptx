@@ -13,9 +13,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Office/Business :: Office Suites",
@@ -32,7 +29,7 @@ dynamic = ["version"]
 keywords = ["powerpoint", "ppt", "pptx", "openxml", "office"]
 license = { text = "MIT" }
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 
 [project.urls]
 Changelog = "https://github.com/scanny/python-pptx/blob/master/HISTORY.rst"
@@ -54,7 +51,7 @@ include = [
 ]
 ignore =  []
 pythonPlatform = "All"
-pythonVersion = "3.9"
+pythonVersion = "3.11"
 reportImportCycles = false
 reportUnnecessaryCast = true
 reportUnnecessaryTypeIgnoreComment = true
