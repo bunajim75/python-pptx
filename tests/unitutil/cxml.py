@@ -19,10 +19,18 @@ from pyparsing import (
     alphanums,
     alphas,
     dblQuotedString,
-    delimitedList,
-    removeQuotes,
     stringEnd,
 )
+
+try:
+    from pyparsing import DelimitedList
+except ImportError:  # pragma: no cover
+    from pyparsing import delimitedList as DelimitedList
+
+try:
+    from pyparsing import remove_quotes
+except ImportError:  # pragma: no cover
+    from pyparsing import removeQuotes as remove_quotes
 
 from pptx.oxml import parse_xml
 from pptx.oxml.ns import _nsmap as nsmap
@@ -35,6 +43,24 @@ if TYPE_CHECKING:
 # ====================================================================
 
 
+def _parse_string(parser, text):
+    if hasattr(parser, "parse_string"):
+        return parser.parse_string(text)
+    return parser.parseString(text)  # pragma: no cover
+
+
+def _parse_with_tabs(parser):
+    if hasattr(parser, "parse_with_tabs"):
+        return parser.parse_with_tabs()
+    return parser.parseWithTabs()  # pragma: no cover
+
+
+def _set_parse_action(parser, *args):
+    if hasattr(parser, "set_parse_action"):
+        return parser.set_parse_action(*args)
+    return parser.setParseAction(*args)  # pragma: no cover
+
+
 def element(cxel_str: str) -> BaseOxmlElement:
     """Return an oxml element parsed from the XML generated from `cxel_str`."""
     _xml = xml(cxel_str)
@@ -43,8 +69,8 @@ def element(cxel_str: str) -> BaseOxmlElement:
 
 def xml(cxel_str: str) -> str:
     """Return the XML generated from `cxel_str`."""
-    root_node.parseWithTabs()
-    root_token = root_node.parseString(cxel_str)
+    _parse_with_tabs(root_node)
+    root_token = _parse_string(root_node, cxel_str)
     xml = root_token.element.xml
     return xml
 
@@ -254,28 +280,31 @@ def grammar():
     attr_name = Word(alphas + ":")
     attr_val = Word(alphanums + " %-./:_")
     attr_def = Group(attr_name + equal + attr_val)
-    attr_list = open_brace + delimitedList(attr_def) + close_brace
+    attr_list = open_brace + DelimitedList(attr_def) + close_brace
 
-    text = dblQuotedString.setParseAction(removeQuotes)
+    text = _set_parse_action(dblQuotedString, remove_quotes)
 
     # w:jc{val=right} ----------------------------
     element = (
         tagname("tagname")
         + Group(Optional(attr_list))("attr_list")
         + Optional(text, default="")("text")
-    ).setParseAction(Element.from_token)
+    )
+    element = _set_parse_action(element, Element.from_token)
 
     child_node_list = Forward()
 
     node = Group(
         element("element") + Group(Optional(slash + child_node_list))("child_node_list")
-    ).setParseAction(connect_node_children)
+    )
+    node = _set_parse_action(node, connect_node_children)
 
-    child_node_list << (open_paren + delimitedList(node) + close_paren | node)
+    child_node_list << (open_paren + DelimitedList(node) + close_paren | node)
 
     root_node = (
         element("element") + Group(Optional(slash + child_node_list))("child_node_list") + stringEnd
-    ).setParseAction(connect_root_node_children)
+    )
+    root_node = _set_parse_action(root_node, connect_root_node_children)
 
     return root_node
 
