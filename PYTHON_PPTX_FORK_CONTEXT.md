@@ -19,6 +19,9 @@ current upstream base is release `v1.0.2`, commit
 - Verification: changes require proportionate unit, acceptance, integration,
   and round-trip coverage, plus desktop PowerPoint inspection where behavior
   can affect rendered or application-specific results.
+- Slide-layout research infrastructure includes independent package-level test
+  helpers and an initially empty, SHA-256-pinned corpus convention with
+  provenance and desktop-verification sidecars.
 - Graphify: use it only to navigate the codebase; confirm conclusions in the
   real files and keep generated output untracked.
 
